@@ -1,5 +1,7 @@
-NUM_PPL = 10 # set to number of people
-NUM_BUS = 4 # set to number of buses
+NUM_PPL = 3 # set to number of people
+NUM_BUS = 2 # set to number of buses
+
+from output_scorer import score_output
 
 def partition(people):
     """
@@ -23,7 +25,18 @@ def partition(people):
 
 groups = list(range(1, NUM_PPL + 1))
 
+best_score = 0
+best_p = []
 for n, p in enumerate(partition(groups), 1):
     # p corresponds to an individual partition
+
     if len(p) == NUM_BUS:
-        print(p)
+        score, msg = score_output("./folder", p)
+        print(msg)
+        if score > best_score:
+            best_score = score
+            best_p = p
+            print(msg)
+            
+print("The best score is: " + str(best_score))
+print(best_p)
