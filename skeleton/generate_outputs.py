@@ -34,7 +34,6 @@ for n, p in enumerate(partition(groups), 1):
 
     if len(p) == NUM_BUS:
         score, msg = score_output("./folder", p)
-        print(msg)
         if score > best_score:
             best_score = score
             best_p = p
