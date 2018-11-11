@@ -23,7 +23,9 @@ def partition(people):
         # put `first` in its own subset 
         yield [ [ first ] ] + smaller
 
-groups = list(range(1, NUM_PPL + 1))
+groups = list()
+for i in range(1, NUM_PPL + 1):
+    groups.append(str(i))
 
 best_score = 0
 best_p = []
@@ -36,7 +38,7 @@ for n, p in enumerate(partition(groups), 1):
         if score > best_score:
             best_score = score
             best_p = p
-            print(msg)
+
             
 print("The best score is: " + str(best_score))
 print(best_p)
