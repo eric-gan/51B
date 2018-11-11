@@ -1,4 +1,3 @@
-
 NUM_PPL = 10 # set to number of people
 NUM_BUS = 4 # set to number of buses
 
