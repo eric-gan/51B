@@ -28,21 +28,24 @@ G = nx.Graph()
 
 
 
-
+# second is number of nodes in second level
+# children is number of nodes per second layer node
+# generates a graph where second layer is completely connected
 def gen(second, children):
+	# generate completely connected graph
 	K = nx.complete_graph(second)
+	# change all nodes to strings
 	mapping = {}
 	for x in range(second):
 		mapping[x] = str(x)
 	K = nx.relabel_nodes(K, mapping)
+	# add each layer three node sequentially
 	heighest = second
 	for i in range(second):
 		for j in range(children):
 			node_name = str(heighest)
 			K.add_node(node_name)
 			base = str(i)
-			print(base)
-			print(node_name)
 			K.add_edge(base, node_name)
 			heighest += 1
 	return K
