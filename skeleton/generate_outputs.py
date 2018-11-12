@@ -24,7 +24,7 @@ def partition(people):
         yield [ [ first ] ] + smaller
 
 groups = list()
-for i in range(1, NUM_PPL + 1):
+for i in range(0, NUM_PPL):
     groups.append(str(i))
 
 best_score = 0
