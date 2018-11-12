@@ -1,4 +1,5 @@
 import networkx as nx
+import matplotlib.pyplot as plt
 G = nx.Graph()
 
 
@@ -51,6 +52,10 @@ def gen(second, children):
 	return K
 
 G = gen(3, 2)
+
+# plot graph
+nx.draw_networkx(G)
+plt.show()
 
 print(G.edges())
 
