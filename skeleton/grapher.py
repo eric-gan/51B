@@ -31,18 +31,24 @@ G = nx.Graph()
 
 def gen(second, children):
 	K = nx.complete_graph(second)
+	mapping = {}
+	for x in range(second):
+		mapping[x] = str(x)
+	K = nx.relabel_nodes(K, mapping)
 	heighest = second
 	for i in range(second):
 		for j in range(children):
-			heighest += 1
 			node_name = str(heighest)
 			K.add_node(node_name)
 			base = str(i)
-			G.add_edge(base, node_name)
+			print(base)
+			print(node_name)
+			K.add_edge(base, node_name)
+			heighest += 1
 	return K
 
 G = gen(3, 2)
 
-print(G.number_of_nodes())
+print(G.edges())
 
 nx.write_gml(G, "./folder/graph.gml")
