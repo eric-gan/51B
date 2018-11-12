@@ -38,15 +38,15 @@ def score_output(input_folder, output_file):
         curr_constraint = [node.replace("'","") for node in line.split(", ")]
         constraints.append(curr_constraint)
 
-    # output = open(output_file)
-    # assignments = []
-    # for line in output:
-    #     line = line[1: -2]
-    #     curr_assignment = [node.replace("'","") for node in line.split(", ")]
-    #     assignments.append(curr_assignment)
-    # print(assignments)
+    output = open(output_file)
+    assignments = []
+    for line in output:
+        line = line[1: -2]
+        curr_assignment = [node.replace("'","") for node in line.split(", ")]
+        assignments.append(curr_assignment)
+    print(assignments)
 
-    assignments = output_file
+    #assignments = output_file
 
     if len(assignments) != num_buses:
         return -1, "Must assign students to exactly {} buses, found {} buses".format(num_buses, len(assignments))
@@ -101,6 +101,6 @@ def score_output(input_folder, output_file):
 
     return score, "Valid output submitted with score: {}".format(score)
 
-# if __name__ == '__main__':
-#     score, msg = score_output(sys.argv[1], sys.argv[2])
-#     print(msg)
+if __name__ == '__main__':
+    score, msg = score_output(sys.argv[1], sys.argv[2])
+    print(msg)

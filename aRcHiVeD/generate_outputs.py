@@ -29,10 +29,14 @@ for i in range(0, NUM_PPL):
 
 best_score = 0
 best_p = []
+count = 0
 for n, p in enumerate(partition(groups), 1):
     # p corresponds to an individual partition
 
     if len(p) == NUM_BUS:
+        count += 1
+        if count % 5000 == 0:
+            print(count)
         score, msg = score_output("./folder", p)
         if score > best_score:
             best_p = []

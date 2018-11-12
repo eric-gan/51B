@@ -28,7 +28,7 @@ G = nx.Graph()
 # 	print("complete: " + str(each))
 
 INSIDE = 3 # change me
-CHILDREN = 4 # change me
+CHILDREN = 332 # change me
 
 # second is number of nodes in second level
 # children is number of nodes per second layer node
@@ -58,6 +58,12 @@ for i in range(INSIDE, INSIDE * (CHILDREN + 1) - 1):
 	v = str(i + 1)
 	G.add_edge(u, v)
 G.add_edge(str(INSIDE * (CHILDREN + 1) - 1), str(INSIDE))
+for i in range(INSIDE, INSIDE * (CHILDREN + 1) - 1, CHILDREN):
+	u = str(i)
+	for j in range(i + 2, i + CHILDREN):
+		G.add_edge(u, str(j))
+
+
 
 
 
