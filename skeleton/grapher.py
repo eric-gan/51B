@@ -41,5 +41,8 @@ def gen(second, children):
 			G.add_edge(base, node_name)
 	return K
 
+G = gen(3, 2)
+
+print(G.number_of_nodes())
 
 nx.write_gml(G, "./folder/graph.gml")
