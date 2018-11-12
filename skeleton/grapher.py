@@ -28,7 +28,7 @@ G = nx.Graph()
 # 	print("complete: " + str(each))
 
 INSIDE = 3 # change me
-CHILDREN = 2 # change me
+CHILDREN = 4 # change me
 
 # second is number of nodes in second level
 # children is number of nodes per second layer node
@@ -64,7 +64,5 @@ G.add_edge(str(INSIDE * (CHILDREN + 1) - 1), str(INSIDE))
 # plot graph
 nx.draw_networkx(G)
 plt.show()
-
-print(G.edges())
 
 nx.write_gml(G, "./folder/graph.gml")
