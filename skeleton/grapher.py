@@ -30,18 +30,24 @@ G = nx.Graph()
 INSIDE = 3 # change me
 CHILDREN = 4 # change me
 
-# second is number of nodes in second level
-# children is number of nodes per second layer node
-# generates a graph where second layer is completely connected
 def gen(inside, children):
-	# generate completely connected graph
+	"""
+	Generates the given graph with a fully connected inside and fully connected outside layer
+
+	param inside: The number of nodes in the inner level
+	type inside: int
+
+	param children: The number of child nodes for each node in the inside level
+	type children: int
+	"""
+	# generate completely connected inside graph
 	K = nx.complete_graph(inside)
 	# change all nodes to strings
 	mapping = {}
 	for x in range(inside):
 		mapping[x] = str(x)
 	K = nx.relabel_nodes(K, mapping)
-	# add each layer three node sequentially
+	# add each outside node sequentially
 	heighest = inside
 	for i in range(inside):
 		for j in range(children):
@@ -53,12 +59,12 @@ def gen(inside, children):
 	return K
 
 G = gen(INSIDE, CHILDREN)
+
 for i in range(INSIDE, INSIDE * (CHILDREN + 1) - 1):
 	u = str(i)
 	v = str(i + 1)
 	G.add_edge(u, v)
 G.add_edge(str(INSIDE * (CHILDREN + 1) - 1), str(INSIDE))
-
 
 
 # plot graph

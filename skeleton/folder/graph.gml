@@ -1,5 +1,4 @@
 graph [
-  name "complete_graph(3)"
   node [
     id 0
     label "0"
