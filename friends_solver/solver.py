@@ -3,6 +3,16 @@ import os
 import numpy as np
 import copy
 
+
+path_to_inputs = "../all_inputs/"
+
+###########################################
+# Change this variable if you want
+# your outputs to be put in a 
+# different folder
+###########################################
+path_to_outputs = "../outputs/"
+
 def score_output(graph_in, num_buses, size_bus, constraints, assignments):
     '''
         Takes an input and an output and returns the score of the output on that input if valid
@@ -60,6 +70,7 @@ def score_output(graph_in, num_buses, size_bus, constraints, assignments):
         for student in assignments[i]:
             # if a student appears more than once
             if attendance[student] == True:
+                #print(assignments[i])
                 return -1, "{0} appears more than once in the bus assignments".format(student)
                 
             attendance[student] = True
@@ -118,9 +129,12 @@ def parse_input(folder_name):
     return graph, num_buses, size_bus, constraints
 
 def gen_random(nodes, num_buses, size_bus):
+    #print(nodes)
     buses = [[] for i in range(num_buses)]
     for i in range(len(nodes)):
-        buses[i % num_buses].extend(nodes[i])
+        #print(nodes[i])
+        buses[i % num_buses].append(nodes[i])
+    print(buses)
     for i in range(100): # number of swaps
         first = np.random.randint(num_buses)
         second = np.random.randint(num_buses)
@@ -131,7 +145,7 @@ def gen_random(nodes, num_buses, size_bus):
         buses[first][first_index], buses[second][second_index]= buses[second][second_index], buses[first][first_index]
     return buses
 
-def modify(buses, size_bus):
+def modify(buses, num_buses, size_bus):
     new_buses = copy.deepcopy(buses)
     for j in range(2): # num iters
         a = np.random.randint(2)
@@ -159,13 +173,13 @@ def modify(buses, size_bus):
 
 def solve(graph, num_buses, size_bus, constraints):
     all_nodes = list(graph.nodes)
-    print(all_nodes)
+    #print(all_nodes)
     bs = gen_random(all_nodes, num_buses, size_bus)
     #print(bs)
     max_score = score_output(graph, num_buses, size_bus, constraints, bs)
     #print(max_score)
     for i in range(100): # number of iterations
-        new_buses = list(modify(bs, size_bus))
+        new_buses = list(modify(bs, num_buses, size_bus))
         #print(new_buses)
         new_score = score_output(graph, num_buses, size_bus, constraints, new_buses)
         #print(new_score)
@@ -174,8 +188,43 @@ def solve(graph, num_buses, size_bus, constraints):
             max_score = new_score
             bs = copy.deepcopy(new_buses)
             #print(new_buses)
-    return score_output(graph, num_buses, size_bus, constraints, bs), bs
+    #return score_output(graph, num_buses, size_bus, constraints, bs), bs
+    print(max_score)
+    return bs
+
+def main():
+    #size_categories = ["small", "medium"]
+    size_categories = ['medium']
+    if not os.path.isdir(path_to_outputs):
+        os.mkdir(path_to_outputs)
+
+    for size in size_categories:
+        category_path = path_to_inputs + "/" + size
+        output_category_path = path_to_outputs + "/" + size
+        category_dir = os.fsencode(category_path)
+        
+        if not os.path.isdir(output_category_path):
+            os.mkdir(output_category_path)
+
+        for input_folder in os.listdir(category_dir):
+            input_name = os.fsdecode(input_folder) 
+            graph, num_buses, size_bus, constraints = parse_input(category_path + "/" + input_name)
+            solution = solve(graph, num_buses, size_bus, constraints)
+            output_file = open(output_category_path + "/" + input_name + ".out", "w")
+
+            #TODO: modify this to write your solution to your 
+            #      file properly as it might not be correct to 
+            #      just write the variable solution to a file
+            #output_file.write(solution)
+            output_file.write(str(solution[0]))
+            for i in range(1, len(solution)):
+                output_file.write('\n' + str(solution[i]))
+            output_file.close()
+
+if __name__ == '__main__':
+    main()
 
 
-graph, num_buses, size_bus, constraints = parse_input('../easy_input/')
-print(solve(graph, num_buses, size_bus, constraints))
+
+#graph, num_buses, size_bus, constraints = parse_input('../all_inputs/small/1/')
+#print(solve(graph, num_buses, size_bus, constraints))
