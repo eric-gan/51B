@@ -148,7 +148,7 @@ def gen_random(nodes, num_buses, size_bus):
 
 def modify(buses, num_buses, size_bus):
     new_buses = copy.deepcopy(buses)
-    for j in range(2): # num iters
+    for j in range(3): # num iters
         a = np.random.randint(2)
         if a == 0: # swap
             first = np.random.randint(num_buses)
@@ -179,7 +179,7 @@ def solve(graph, num_buses, size_bus, constraints):
     #print(bs)
     max_score = score_output(graph, num_buses, size_bus, constraints, bs)
     #print(max_score)
-    for i in range(100): # number of iterations
+    for i in range(5000): # number of iterations
         new_buses = list(modify(bs, num_buses, size_bus))
         #print(new_buses)
         new_score = score_output(graph, num_buses, size_bus, constraints, new_buses)
