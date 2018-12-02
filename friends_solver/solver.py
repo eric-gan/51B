@@ -139,8 +139,10 @@ def gen_random(nodes, num_buses, size_bus):
     for i in range(100): # number of swaps
         first = np.random.randint(num_buses)
         second = np.random.randint(num_buses)
-        while second == first:
+        count = 0
+        while second == first and count < 10:
             second = np.random.randint(num_buses)
+            count += 1
         first_index = np.random.randint(len(buses[first]))
         second_index = np.random.randint(len(buses[second]))
         buses[first][first_index], buses[second][second_index]= buses[second][second_index], buses[first][first_index]
@@ -153,22 +155,34 @@ def modify(buses, num_buses, size_bus):
         if a == 0: # swap
             first = np.random.randint(num_buses)
             second = np.random.randint(num_buses)
-            while second == first:
-                second = np.random.randint(num_buses)
+            #while second == first:
+            #    print('looking s 0')
+            #    second = np.random.randint(num_buses)
             first_index = np.random.randint(len(new_buses[first]))
             second_index = np.random.randint(len(new_buses[second]))
             new_buses[first][first_index], new_buses[second][second_index]= new_buses[second][second_index], new_buses[first][first_index]
         if a == 1: # move
-            first = np.random.randint(num_buses)
-            while len(new_buses[first]) < 2:
+            transferrer = [i for i in range(len(new_buses)) if len(new_buses[i]) >= 2 and len(new_buses[i]) <= size_bus + 1]
+            transferee = [i  for i in range(len(new_buses)) if len(new_buses[i]) < size_bus and len(new_buses[i]) > 0]
+            if not ((len(transferrer) == 1 and transferrer != transferee) or len(transferee) <= 1 or len(transferrer) == 0):
                 first = np.random.randint(num_buses)
-            second = np.random.randint(num_buses)
-            while second == first or len(buses[second]) >= size_bus:
-                second = np.random.randint(num_buses)
-            first_index = np.random.randint(len(new_buses[first]))
-            temp = new_buses[first][first_index]
-            new_buses[second].append(temp)
-            new_buses[first].remove(temp)
+                count = 0
+                while len(new_buses[first]) < 2 and count < 10:
+                    #print('looking f 1')
+                    first = np.random.randint(num_buses)
+                    count += 1
+                if count < 10:
+                    count = 0
+                    second = np.random.randint(num_buses)
+                    while (second == first or len(buses[second]) >= size_bus) and count < 20:
+                        #print('looking s 1')
+                        count += 1
+                        second = np.random.randint(num_buses)
+                    if count < 20:
+                        first_index = np.random.randint(len(new_buses[first]))
+                        temp = new_buses[first][first_index]
+                        new_buses[second].append(temp)
+                        new_buses[first].remove(temp)
     return new_buses
 
 
@@ -223,22 +237,21 @@ def main():
             input_name = os.fsdecode(input_folder) 
             graph, num_buses, size_bus, constraints = parse_input(category_path + "/" + input_name)
             tasks.append((graph, num_buses, size_bus, constraints, size, input_name))
-            solution = solve(graph, num_buses, size_bus, constraints)
-            output_file = open(output_category_path + "/" + input_name + ".out", "w")
+            #solution = solve(graph, num_buses, size_bus, constraints)
+            #output_file = open(output_category_path + "/" + input_name + ".out", "w")
 
             #TODO: modify this to write your solution to your 
             #      file properly as it might not be correct to 
             #      just write the variable solution to a file
-            #output_file.write(solution)
-            output_file.write(str(solution[0]))
-            for i in range(1, len(solution)):
-                output_file.write('\n' + str(solution[i]))
-            output_file.close()
+            #output_file.write(str(solution[0]))
+            #for i in range(1, len(solution)):
+            #    output_file.write('\n' + str(solution[i]))
+            #output_file.close()
     #pool = Pool(4)
     #print(len(tasks))
     #results = [pool.apply_async(do_solve, t) for t in tasks]
-    #with multiprocessing.Pool(processes=4) as pool:
-    #    pool.starmap(do_solve, tasks)
+    with multiprocessing.Pool(processes=4) as pool:
+        pool.starmap(do_solve, tasks)
     #pool.close()
     #pool.join()
 
