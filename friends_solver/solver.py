@@ -2,6 +2,7 @@ import networkx as nx
 import os
 import numpy as np
 import copy
+import multiprocessing
 
 
 path_to_inputs = "../all_inputs/"
@@ -11,7 +12,7 @@ path_to_inputs = "../all_inputs/"
 # your outputs to be put in a 
 # different folder
 ###########################################
-path_to_outputs = "../outputs/"
+path_to_outputs = "../outputs2/"
 
 def score_output(graph_in, num_buses, size_bus, constraints, assignments):
     '''
@@ -138,10 +139,8 @@ def gen_random(nodes, num_buses, size_bus):
     for i in range(100): # number of swaps
         first = np.random.randint(num_buses)
         second = np.random.randint(num_buses)
-        count = 0
-        while second == first and count < 10:
+        while second == first:
             second = np.random.randint(num_buses)
-            count += 1
         first_index = np.random.randint(len(buses[first]))
         second_index = np.random.randint(len(buses[second]))
         buses[first][first_index], buses[second][second_index]= buses[second][second_index], buses[first][first_index]
@@ -149,33 +148,27 @@ def gen_random(nodes, num_buses, size_bus):
 
 def modify(buses, num_buses, size_bus):
     new_buses = copy.deepcopy(buses)
-    for j in range(3): # num iters
+    for j in range(2): # num iters
         a = np.random.randint(2)
         if a == 0: # swap
             first = np.random.randint(num_buses)
             second = np.random.randint(num_buses)
-            #while second == first:
-            #    print('looking s 0')
-            #    second = np.random.randint(num_buses)
+            while second == first:
+                second = np.random.randint(num_buses)
             first_index = np.random.randint(len(new_buses[first]))
             second_index = np.random.randint(len(new_buses[second]))
             new_buses[first][first_index], new_buses[second][second_index]= new_buses[second][second_index], new_buses[first][first_index]
         if a == 1: # move
-            transferrer = [i for i in range(len(new_buses)) if len(new_buses[i]) >= 2 and len(new_buses[i]) <= size_bus + 1]
-            transferee = [i  for i in range(len(new_buses)) if len(new_buses[i]) < size_bus and len(new_buses[i]) > 0]
-            if not ((len(transferrer) == 1 and transferrer != transferee) or len(transferee) <= 1 or len(transferrer) == 0):
+            first = np.random.randint(num_buses)
+            while len(new_buses[first]) < 2:
                 first = np.random.randint(num_buses)
-                while len(new_buses[first]) < 2:
-                    #print('looking f 1')
-                    first = np.random.randint(num_buses)
+            second = np.random.randint(num_buses)
+            while second == first or len(buses[second]) >= size_bus:
                 second = np.random.randint(num_buses)
-                while second == first or len(buses[second]) >= size_bus:
-                    #print('looking s 1')
-                    second = np.random.randint(num_buses)
-                first_index = np.random.randint(len(new_buses[first]))
-                temp = new_buses[first][first_index]
-                new_buses[second].append(temp)
-                new_buses[first].remove(temp)
+            first_index = np.random.randint(len(new_buses[first]))
+            temp = new_buses[first][first_index]
+            new_buses[second].append(temp)
+            new_buses[first].remove(temp)
     return new_buses
 
 
@@ -186,7 +179,7 @@ def solve(graph, num_buses, size_bus, constraints):
     #print(bs)
     max_score = score_output(graph, num_buses, size_bus, constraints, bs)
     #print(max_score)
-    for i in range(1000): # number of iterations 2000
+    for i in range(100): # number of iterations
         new_buses = list(modify(bs, num_buses, size_bus))
         #print(new_buses)
         new_score = score_output(graph, num_buses, size_bus, constraints, new_buses)
@@ -200,8 +193,20 @@ def solve(graph, num_buses, size_bus, constraints):
     print(max_score)
     return bs
 
+
+def do_solve(graph, num_buses, size_bus, constraints, size, input_name):
+    output_category_path = path_to_outputs + "/" + size
+    solution = solve(graph, num_buses, size_bus, constraints)
+    output_file = open(output_category_path + "/" + input_name + ".out", "w")
+    output_file.write(str(solution[0]))
+    for i in range(1, len(solution)):
+        output_file.write('\n' + str(solution[i]))
+    output_file.close()
+
+
 def main():
     #size_categories = ["small", "medium"]
+    tasks = []
     size_categories = ['medium']
     if not os.path.isdir(path_to_outputs):
         os.mkdir(path_to_outputs)
@@ -217,6 +222,7 @@ def main():
         for input_folder in os.listdir(category_dir):
             input_name = os.fsdecode(input_folder) 
             graph, num_buses, size_bus, constraints = parse_input(category_path + "/" + input_name)
+            tasks.append((graph, num_buses, size_bus, constraints, size, input_name))
             solution = solve(graph, num_buses, size_bus, constraints)
             output_file = open(output_category_path + "/" + input_name + ".out", "w")
 
@@ -228,6 +234,13 @@ def main():
             for i in range(1, len(solution)):
                 output_file.write('\n' + str(solution[i]))
             output_file.close()
+    #pool = Pool(4)
+    #print(len(tasks))
+    #results = [pool.apply_async(do_solve, t) for t in tasks]
+    #with multiprocessing.Pool(processes=4) as pool:
+    #    pool.starmap(do_solve, tasks)
+    #pool.close()
+    #pool.join()
 
 if __name__ == '__main__':
     main()
