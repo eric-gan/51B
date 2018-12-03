@@ -5,7 +5,7 @@ import copy
 import multiprocessing
 
 
-path_to_inputs = "../all_inputs/"
+path_to_inputs = "../all_inputs2/"
 
 ###########################################
 # Change this variable if you want
