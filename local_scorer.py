@@ -8,7 +8,7 @@ make_graphs = False
 version_name = 'YOURNAME'
 
 path_to_inputs = "./all_inputs"
-path_to_outputs = "./goat"
+path_to_outputs = "./final"
 path_to_graphs = "./graphs"
 size_categories = ["small", "medium"]
 
