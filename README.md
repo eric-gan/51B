@@ -1,13 +1,14 @@
 #
 Berkeley Marina to Lombardie
 
-Citations 
+Citations: 
+- Stirling numbers of the Second Kind (https://en.wikipedia.org/wiki/Stirling_numbers_of_the_second_kind)       
+- Simulated Annealing (http://katrinaeg.com/simulated-annealing.html?fbclid=IwAR3mC2Ggqrl5Jeb3J0GmyEPBeG_D45ZkhQ95kcmq74s9BIW64sZbDxOxmJ0)
 
-Stirling numbers of the Second Kind (https://en.wikipedia.org/wiki/Stirling_numbers_of_the_second_kind)       
-Simulated Annealing (http://katrinaeg.com/simulated-annealing.html?fbclid=IwAR3mC2Ggqrl5Jeb3J0GmyEPBeG_D45ZkhQ95kcmq74s9BIW64sZbDxOxmJ0)
 
 
-Steps for implementation:
+
+How to Run Code:
 1. Download all_inputs from Piazza
 2. Create a folder called all_inputs and in this folder make a folder called small, medium, and large Put the inputs for small, medium, and large in their respective folders.
 3. Now go back to the head directory and go into the friends_solver folder and open solver.py in any editor.
