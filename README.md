@@ -3,7 +3,7 @@ Berkeley Marina to Lombardie
 
 Citations 
 
-Stirling numbers of the Second Kind (https://en.wikipedia.org/wiki/Stirling_numbers_of_the_second_kind)
+Stirling numbers of the Second Kind (https://en.wikipedia.org/wiki/Stirling_numbers_of_the_second_kind)       
 Simulated Annealing (http://katrinaeg.com/simulated-annealing.html?fbclid=IwAR3mC2Ggqrl5Jeb3J0GmyEPBeG_D45ZkhQ95kcmq74s9BIW64sZbDxOxmJ0)
 
 
