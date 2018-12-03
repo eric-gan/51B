@@ -5,7 +5,7 @@ import copy
 import multiprocessing
 from output_scorer import score_output
 
-paths_outputs = ["./best", "./outputs_test", "./outputs"]
+paths_outputs = ["./goat", "./goatvm"] #, "./outputs_test", "./outputs"]
 path_to_inputs = "./all_inputs"
 #path_to_outputs = "./outputs_test"
 #path_to_outputs2 = "./outputs"
